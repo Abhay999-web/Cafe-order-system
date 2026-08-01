@@ -1,0 +1,41 @@
+src/
+│
+├── config/
+│   └── database.ts
+│
+├── models/
+│   ├── user.model.ts
+│   ├── food.model.ts
+│   ├── order.model.ts
+│   
+│
+├── types/
+│   ├── user.types.ts
+│   ├── food.types.ts
+│   ├── order.types.ts
+│  
+│
+└── env.d.ts
+
+
+
+
+
+
+
+src/
+│
+├── controllers/
+│   ├── auth.controller.ts
+│   ├── user.controller.ts
+│   ├── order.controller.ts
+│   └── food.controller.ts
+│
+├── middleware/
+│   ├── auth.middleware.ts
+│   └── admin.middleware.ts
+│
+├── models/
+├── routes/
+├── types/
+├── utils/
