@@ -16,6 +16,10 @@ app.use(cookieParser())
 
 app.use("/api/auth", authRouter)
 
+
+
+
+
 app.get("/health",(req,res)=>{
     res.status(200).json({
         status: 'ok'

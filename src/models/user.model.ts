@@ -4,19 +4,33 @@ const userSchema = new mongoose.Schema({
 
     username: {
         type: String,
-        required: true,
+        minlength: 3,
+        trim: true,
+        required ():boolean{
+            return this.role !== 'guest'
+        }
 
     },
     
     email: {
         type: String,
-        required: true,
-        unique: true
+        trim: true,
+        lowercase: true,
+        unique: true,
+        sparse: true,
+        required ():boolean{
+            return this.role !== 'guest'
+        }
+
 
     },
     password: {
         type: String,
-        required: true
+        minlength: 6,
+        select: false,
+        required ():boolean{
+            return this.role !== 'guest'
+        }
 
     },
 
@@ -26,10 +40,7 @@ const userSchema = new mongoose.Schema({
         default: 'client'
     },
 
-    isGuest:{
-        type: Boolean,
-        default: false
-    }
+   
 
 
 }, {

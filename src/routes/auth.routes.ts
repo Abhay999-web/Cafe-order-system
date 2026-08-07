@@ -1,6 +1,7 @@
 import express from 'express'
 import {register, login , getMe, logout} from "../controllers/auth.controller.js"
 import { identifyUser } from '../middleware/auth.middleware.js'
+import { guestLogin } from '../controllers/guestUser.controller.js'
 
 
 const authRouter = express.Router()
@@ -20,6 +21,10 @@ authRouter.get("/getMe", identifyUser, getMe)
 
 /* POST api/auth/logout */
 authRouter.post("/logout", logout)
+
+
+/* POST api/auth/guestUser */
+authRouter.post("/guestLogin", guestLogin)
 
 
 export default authRouter;

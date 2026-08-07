@@ -1,38 +1,39 @@
-import { userModel } from "../models/user.model.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import type {Request, Response, NextFunction} from "express";
+import jwt from "jsonwebtoken"
+import type {Request , Response, NextFunction } from "express"
+import crypto from "crypto"
 
 
-export async function guestUser(req: Request, res: Response, next: NextFunction){
+export async function guestLogin(req: Request, res: Response, next: NextFunction ){
 
-    try{
+ try{
 
-        const guest = await userModel.create({
-            username: `guest_${Date.now()}`,    //Date.now() will create identity 
-            isGuest: true,
-            role: "client"
-        })
+    const guestId = crypto.randomUUID() //this will generate a random unique id for the guest user
+
+    const token = jwt.sign(
+        {
+            role: "guest",
+            guestId : guestId
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "5h"
+        }
+
+    )
+
+    res.cookie("token", token,{
+        httpOnly: true,
+        maxAge: 5 * 60 * 60 * 1000 //millisecod
+    })
+
+    return res.status(200).json({
+        message: "Guest login successfully",
+        guestId
+    })
 
 
-        const token = jwt.sign({
-            id : guest._id,
-            isGuest: true
-        }, process.env.JWT_SECRET,
-    {expiresIn: '5h'}
-)
-
-res.cookie("token", token)
-
-return res.status(201).json({
-    message: "Guest user created",
-    guestId :  guest._id
-})
-
-
-    }catch(error){
-        next(error)
-
-    }
+ }catch(error){
+    next(error)
+ }
 
 }

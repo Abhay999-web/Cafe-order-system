@@ -39,7 +39,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
             })
         }
 
-        const hash = await bcrypt.hash(password, 10)
+        const hash = await bcrypt.hash(password as string, 10)
 
 
 
@@ -47,7 +47,8 @@ export async function register(req: Request, res: Response, next: NextFunction) 
         const user = await userModel.create({
             username,
             email,
-            password: hash
+            password: hash,
+            role: "client"
         })
 
         const token = jwt.sign({
@@ -96,12 +97,18 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         }
 
         const user = await userModel.findOne({
-            $or: [  /* condition email or password */
+            $or: [    /* condition email or password */
                 { email },
                 { username }
 
             ]
         })
+            .select("+password")  //method of mongoDB to select the password field which is not selected by default in the schema
+       
+
+      
+
+
 
         if (!user) {
             return res.status(400).json({
@@ -109,9 +116,11 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             })
         }
 
+
+
         const isPasswordValid = await bcrypt.compare(
-            password,
-            user.password
+            password as string,
+            user.password as string
         )
 
         if (!isPasswordValid) {

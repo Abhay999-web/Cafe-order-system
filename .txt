@@ -39,3 +39,420 @@ src/
 ├── routes/
 ├── types/
 ├── utils/
+
+
+hey i making cafe order system and using first time typescript with react i use to learning as well making project also i make models and authcontroller i just asking for middle ware how to make middle ware of authcontroller and i have model => order, user(client , admin, guest) ,food
+
+
+
+
+
+# Cafe Project - Development Context
+
+## Project Overview
+
+I am building a full-stack Cafe Order Management System.
+
+Goal:
+
+* Customers can view food items and place orders.
+* Customers can continue as registered users or temporary guests.
+* Admin can manage food and orders.
+* Learning project while building with TypeScript + React + Node.js.
+
+---
+
+# Tech Stack
+
+Backend:
+
+* Node.js
+* Express.js
+* TypeScript
+* MongoDB
+* Mongoose
+* JWT Authentication
+* Cookies for storing JWT
+* bcrypt for password hashing
+
+Frontend:
+
+* React + TypeScript (currently learning and building)
+
+---
+
+# Current Backend Structure
+
+```
+backend
+|
+├── controllers
+│   ├── auth.controller.ts
+│   ├── guestUser.controller.ts
+│   ├── food.controller.ts (not completed)
+│   ├── order.controller.ts (not completed)
+│   └── user.controller.ts (not decided)
+│
+├── models
+│   ├── user.model.ts
+│   ├── food.model.ts
+│   └── order.model.ts
+│
+├── routes
+│   ├── auth.routes.ts
+│   ├── food.routes.ts (not completed)
+│   └── order.routes.ts (not completed)
+│
+├── middleware
+│   └── auth.middleware.ts
+│
+└── types
+    ├── express.types.ts
+    └── env.types.ts
+```
+
+---
+
+# Completed Work
+
+## 1. Authentication System ✅
+
+Created:
+
+auth.controller.ts
+
+Features completed:
+
+* Register user
+* Login user
+* Logout user
+* Get current user
+
+User roles:
+
+```
+client
+admin
+```
+
+User model:
+
+```ts
+role: {
+    type:String,
+    enum:["client","admin"],
+    default:"client"
+}
+```
+
+---
+
+## 2. Guest Authentication ✅
+
+Created:
+
+guestUser.controller.ts
+
+Guest is NOT stored in database.
+
+Guest flow:
+
+```
+Guest Login
+      |
+Generate guestId using crypto.randomUUID()
+      |
+Create JWT
+      |
+Store token in cookie
+      |
+Token expires after 5 hours
+```
+
+Guest JWT example:
+
+```json
+{
+    "role":"guest",
+    "guestId":"unique-id"
+}
+```
+
+---
+
+# Authentication Middleware
+
+Current middleware:
+
+identifyUser()
+
+Purpose:
+
+* Read JWT from cookie
+* Verify token
+* Attach user information to req.user
+
+Important:
+
+Middleware supports:
+
+```ts
+role:
+"client" | "admin" | "guest"
+```
+
+Current Request type:
+
+```ts
+req.user = {
+    id?,
+    username?,
+    guestId?,
+    role
+}
+```
+
+---
+
+# Current Models
+
+## User Model
+
+Purpose:
+
+Stores registered users only.
+
+Roles:
+
+```
+client
+admin
+```
+
+Guest is not stored.
+
+---
+
+## Order Model
+
+Current design:
+
+```ts
+{
+    user:ObjectId,
+    guestId:String,
+    guestName:String,
+    tableNumber:Number,
+
+    items:[
+        {
+            food:ObjectId,
+            quantity:Number,
+            priceAtOrder:Number
+        }
+    ],
+
+    totalAmount:Number,
+
+    status:
+    [
+        pending,
+        accepted,
+        preparing,
+        ready,
+        completed,
+        cancelled
+    ],
+
+    orderType:
+    [
+        dine_in,
+        takeaway,
+        delivery
+    ]
+}
+```
+
+Order supports:
+
+* Client orders
+* Guest orders
+
+Client:
+
+```
+user field saved
+```
+
+Guest:
+
+```
+guestId saved
+```
+
+---
+
+# Current Routes
+
+auth.routes.ts completed:
+
+```
+POST /api/auth/register
+
+POST /api/auth/login
+
+GET /api/auth/getMe
+
+POST /api/auth/logout
+
+POST /api/auth/guestLogin
+```
+
+---
+
+# Current Understanding
+
+Authentication system is completed.
+
+Admin, client and guest concept is decided:
+
+Admin:
+
+* Database user
+* role = admin
+
+Client:
+
+* Database user
+* role = client
+
+Guest:
+
+* Temporary JWT only
+* No database entry
+* guestId identifies guest orders
+
+---
+
+# Remaining Work
+
+## 1. Create Role Middleware
+
+Need:
+
+```
+allowRoles()
+```
+
+Example:
+
+Admin only:
+
+```
+allowRoles("admin")
+```
+
+Client + Guest:
+
+```
+allowRoles("client","guest")
+```
+
+---
+
+## 2. Food Controller
+
+Need to create:
+
+```
+createFood()
+getAllFood()
+getSingleFood()
+updateFood()
+deleteFood()
+```
+
+Rules:
+
+Everyone can view food.
+
+Only admin can:
+
+* add food
+* update food
+* delete food
+
+---
+
+## 3. Order Controller
+
+Need to create:
+
+```
+createOrder()
+
+getMyOrders()
+
+getAllOrders()
+
+updateOrderStatus()
+```
+
+Order logic:
+
+If:
+
+```
+req.user.role === "client"
+```
+
+save:
+
+```
+user:req.user.id
+```
+
+If:
+
+```
+req.user.role === "guest"
+```
+
+save:
+
+```
+guestId:req.user.guestId
+```
+
+Admin:
+
+* view all orders
+* update order status
+
+---
+
+## 4. Decide user.controller.ts
+
+Currently not needed for authentication.
+
+Possible future use:
+
+* update profile
+* change password
+* admin user management
+
+---
+
+# Next Recommended Step
+
+Continue from:
+
+1. Create role middleware
+2. Complete food controller
+3. Create food routes
+4. Test admin/client/guest permissions
+5. Build order controller
+
+---
+
+When continuing, first explain the current state above and continue from the next pending task.

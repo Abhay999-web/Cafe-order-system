@@ -7,16 +7,22 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         required: false,   //Guest account can also place order that is why its false
     },
-    
+
+    guestId: {
+
+        type: String,
+        required: false
+
+    },
+
     guestName: {
         type: String,
-        required: false,
         trim: true,
     },
 
     tableNumber: {
         type: Number,
-        required: true
+        required: false
     },
 
 
@@ -60,6 +66,16 @@ const orderSchema = new mongoose.Schema({
         ],
         default: "pending",
     },
+
+    orderType: {
+        type: String,
+        enum: [
+            "dine_in",
+            "takeaway",
+            "delivery"
+        ],
+        default: "dine_in"
+    }
 
 }, {
     timestamps: true,
