@@ -5,6 +5,7 @@ const foodSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
+        trim: true
 
     },
 
@@ -14,6 +15,12 @@ const foodSchema = new mongoose.Schema({
         trim: true
 
     },
+
+    discription:{
+        type: String,
+        trim: true
+    },
+
     images: [{
         type: String,
 

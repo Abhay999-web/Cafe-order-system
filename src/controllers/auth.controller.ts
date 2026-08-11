@@ -33,8 +33,8 @@ export async function register(req: Request, res: Response, next: NextFunction) 
                 message: "User is alreday exists" +
                     (userAlreadyExists.email == email
 
-                        ? "Email already exists"
-                        : "Username already exists"
+                        ? "Email already exists "
+                        : " Username already exists"
                     )
             })
         }
