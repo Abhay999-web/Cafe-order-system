@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser"
 import authRouter from "./routes/auth.routes.js";
+import foodRouter from "./routes/food.routes.js";
 
 
 const app = express()
@@ -14,8 +15,13 @@ app.use(cookieParser())
 
 /* Routes */
 
+/* Authetication */
 app.use("/api/auth", authRouter)
 
+
+/* Food  */
+
+app.use("/api/food", foodRouter)
 
 
 
