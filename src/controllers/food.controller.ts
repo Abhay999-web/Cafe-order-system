@@ -112,7 +112,7 @@ export async function deleteFood(req: Request, res: Response, next: NextFunction
 
     try{
 
-        const deleteFood = Food.findByIdAndDelete(
+        const deleteFood = await Food.findByIdAndDelete(
             req.params.id
         )
 
@@ -125,7 +125,7 @@ export async function deleteFood(req: Request, res: Response, next: NextFunction
 
         return res.status(200).json({
             message: "Food deleted successfully",
-            food: deleteFood
+            deleteFood
         })
     
 

@@ -5,6 +5,7 @@ declare global{
             user: {
                 id: string,
                 username: string,
+                guestId: string,
                 role: 'client'| 'admin' | 'guest'
             }
         }

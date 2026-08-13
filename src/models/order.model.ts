@@ -15,11 +15,6 @@ const orderSchema = new mongoose.Schema({
 
     },
 
-    guestName: {
-        type: String,
-        trim: true,
-    },
-
     tableNumber: {
         type: Number,
         required: false
