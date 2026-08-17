@@ -1,5 +1,6 @@
 import { Food } from "../models/food.model.js";
 import type { Request, Response, NextFunction } from 'express'
+import imagekit from "../config/imagekit.js";
 
 
 
@@ -7,20 +8,42 @@ export async function createFood(req: Request, res: Response, next: NextFunction
 
     try {
 
-        const { discription, images, dishName, category, price, availability } = req.body;
+        const { description, dishName, category, price, availability } = req.body;
+
+
+         if(!req.file){
+            return res.status(400).json({
+                message: "Image is required"
+
+            })
+        }
+
+         const uploadImage = await imagekit.files.upload({
+            file: req.file.buffer.toString("base64"),
+            fileName: req.file.originalname,
+            folder: "/cafe/foods"
+        })
+
+        if(!uploadImage.url){
+            return res.status(500).json({
+                message: "Image upload failed"
+            })
+        }
 
         const food = await Food.create({
-            discription,
-            images,
+            description,
+            images: [uploadImage.url],  //uploading data direct to imagekit 
             dishName,
             category,
             price,
             availability
         })
 
+    
         res.status(201).json({
             message: "Food created successfully",
             food
+           
         })
 
     } catch (error) {

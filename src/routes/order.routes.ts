@@ -16,7 +16,7 @@ orderRouter.get("/my-order", identifyUser, allowRoles("client", "guest"), getMyO
 orderRouter.get("/", identifyUser, allowRoles("admin"), getAllOrders )
 
 
-orderRouter.patch("/:", identifyUser, allowRoles("admin"), updateOrderStatus )
+orderRouter.patch("/:id", identifyUser, allowRoles("admin"), updateOrderStatus )
 
 
 

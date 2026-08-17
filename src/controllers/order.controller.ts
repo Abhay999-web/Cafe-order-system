@@ -171,7 +171,7 @@ export async function getMyOrders(req:Request , res:Response , next:NextFunction
         //client
         if(req.user.role === "client"){
            const orders = await Order.find({
-            user: req.user.id,
+            guestId: req.user.guestId,
 
            }).populate("items.food")
            return res.status(200).json({
@@ -188,6 +188,10 @@ export async function getMyOrders(req:Request , res:Response , next:NextFunction
             orders
            })
         }
+
+        return res.status(403).json({
+            message: "Only client or guest can view their orders"
+        })
 
 
     }catch(error){
