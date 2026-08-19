@@ -171,7 +171,8 @@ export async function getMyOrders(req:Request , res:Response , next:NextFunction
         //client
         if(req.user.role === "client"){
            const orders = await Order.find({
-            guestId: req.user.guestId,
+           
+             user: req.user.id,           
 
            }).populate("items.food")
            return res.status(200).json({
@@ -182,7 +183,7 @@ export async function getMyOrders(req:Request , res:Response , next:NextFunction
         //guest
         if(req.user.role === "guest"){
             const orders = await Order.find({
-                user: req.user.guestId,
+                guestId: req.user.guestId, 
             }).populate("items.food")
             return res.status(200).json({
             orders
